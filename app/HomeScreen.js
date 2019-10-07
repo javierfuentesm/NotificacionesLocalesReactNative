@@ -6,7 +6,7 @@ import PushController from './PushController.js'; //The push controller created 
 export default class HomeScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {clicks: 0};
     this.handleAppStateChange = this.handleAppStateChange.bind(this);
     this.sendNotification = this.sendNotification.bind(this);
   };
@@ -24,26 +24,38 @@ export default class HomeScreen extends Component {
   handleAppStateChange(appState) {
     if (appState === 'background') {
       // Schedule a notification
-      PushNotification.localNotificationSchedule({
+     /*  PushNotification.localNotificationSchedule({
         message: 'Scheduled delay notification message', // (required)
         date: new Date(Date.now() + (3 * 1000)) // in 3 secs
-      });
+      }); */
     }
   };
 
   sendNotification() {
+    this.setState((prevState) => ({
+      clicks: prevState.clicks + 1
+   }));
     PushNotification.localNotification({
-      message: 'You pushed the notification button!'
+      message: 'Has recibido una notificacion '
     });
   };
 
   render() {
     return (
+      
       <View>
-        <Button title='Press here for a notification'
-          onPress={this.sendNotification} />
+      <Text style={{fontWeight: 'bold'}}>
+
+      Has presionado el boton {this.state.clicks} veces
+</Text>
+        <Button title='Presiona aqui para recibir una notificacion'
+          onPress={this.sendNotification}>
+            </Button>
         <PushController />
+
       </View>
+
+    
     );
   };
 };
